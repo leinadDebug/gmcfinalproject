@@ -8,6 +8,7 @@ dotenv.config();
 
 connectDB();
 const app = express();
+app.use(express.json()); // access the json data
 
 const PORT = process.env.PORTNUMBER || 5000;
 
@@ -16,6 +17,7 @@ app.get("/", (req, res) => {
 });
 
 app.use('/api/user', useRoutes)
+
 app.get("/api/chats", (req, res) => {
    res.setHeader('Access-Control-Allow-Origin', '*') // / Set the 'Access-Control-Allow-Origin' header to '*' to allow requests from any origin. // as it can have security implications. You might want to restrict access to specific origins.
    chats ? res.send(chats) : console.error("No chat data found")
