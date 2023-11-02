@@ -3,6 +3,8 @@ const { chats } = require("./data/data");
 const dotenv  = require("dotenv");
 const useRoutes = require('./route/userRoutes');
 const connectDB = require("./config/db");
+const { notFound, errorHandler } = require("./middleware/errormiddleware");
+
 
 dotenv.config();
 
@@ -17,6 +19,9 @@ app.get("/", (req, res) => {
 });
 
 app.use('/api/user', useRoutes)
+
+app.use(notFound)
+app.use(errorHandler)
 
 app.get("/api/chats", (req, res) => {
    res.setHeader('Access-Control-Allow-Origin', '*') // / Set the 'Access-Control-Allow-Origin' header to '*' to allow requests from any origin. // as it can have security implications. You might want to restrict access to specific origins.
