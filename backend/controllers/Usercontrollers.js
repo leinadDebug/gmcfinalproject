@@ -1,42 +1,47 @@
-const asyncHandler = require('express-async-handler')   //installed express-async-handler
-const User = require('../models/userModel')
-const generateToken = require("../config/generateToken")
+const asyncHandler = require("express-async-handler"); //installed express-async-handler
+const User = require("../models/userModel");
+const generateToken = require("../config/generateToken");
 
-const registerUser = asyncHandler( async(req,res)=>{ 
-    const {name,email,password, pic} = req.body
+const registerUser = asyncHandler(async (req, res) => {
+  const { name, email, password, pic } = req.body;
 
-    if(!name || !email || !password){
-        res.status(400);
-        throw new Error("Enter all the fields")
-    }
+  if (!name || !email || !password) {
+    res.status(400);
+    throw new Error("Enter all the fields");
+  }
 
-    const UserExist = await User.findOne({email});
+  const UserExists = await User.findOne({ email });
 
-    if (UserExist) {
-        res.status(400);
-        throw new Error("User already exist");
-      }
+  if (UserExists) {
+    res.status(400);
+    throw new Error("User already exist");
+  }
 
-      const User = await User.create({
-        name,
-        email,
-        password,
-        pic,
-      });
+  const user = await User.create({
+    name,
+    email,
+    password,
+    pic,
+  });
 
-      if(User){
-         res.status(201).json({
-            _id: User._id,
-            name: User.name,
-            email: User.email,
-            pic: User.pic,
-            token: generateToken(User._id)
-         });
-      } else{
-        res.status(400);
-        throw new Error('Failed to create user');
-      };
-
+  if (user) {
+    res.status(201).json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      pic: user.pic,
+      token: generateToken(user._id),
+    });
+  } else {
+    res.status(400);
+    throw new Error("Failed to create user");
+  }
 });
 
-module.exports={registerUser}
+const authUser = asyncHandler(async (req,res) =>{
+  const {email, password} = req.body
+
+  const user
+})
+
+module.exports = { registerUser };
