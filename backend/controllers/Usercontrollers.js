@@ -59,17 +59,17 @@ const authUser = asyncHandler(async (req, res) => {
 
 //api/User/?search=l3inad
 const allUsers = asyncHandler(async (req, res) => {
-  const keyWord = req.query.search
+  const keyword = req.query.search
     ? {
         $or: [
-          
+          // decode the token
           { name: { $regex: req.query.search, $options: "i" } },
           { email: { $regex: req.query.search, $options: "i" } },
         ],
       }
     : {};
 
-  const users = await User.find(keyWord)
+    const users = await User.find(keyword).find({ _id: { $ne: req.user._id } });
   res.send(users);
 });
 
